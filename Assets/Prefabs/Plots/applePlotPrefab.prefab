@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.990566, g: 0.93091446, b: 0.7335796, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -123,7 +123,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4922595086169463233}
         m_TargetAssemblyTypeName: Plot, Assembly-CSharp
-        m_MethodName: UI_SellProducts
+        m_MethodName: UI_UpgradeCapacity
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -748,13 +748,23 @@ MonoBehaviour:
   plotInfo:
     type: 0
     unitProductionRate: 2
-    plotSize: 1
+    plotSizeBase: 1
+    currentPlotSizeUpgradeLevel: 0
+    plotSizeUpgradeLevelMax: 3
+    plotSizeFixedUpgradeAmount: 0.5
     warehouse:
-      capacity: 3
+      capacityBase: 3
+      currentCapacityUpgradeLevel: 0
+      capacityUpgradeLevelMax: 3
+      capacityFixedUpgradeAmount: 2
       fixedUnitPrice: 10
   progressSlider: {fileID: 4922595085433613669}
   productsCountText: {fileID: 4922595084879070932}
-  sellingPricetext: {fileID: 4922595086598108491}
+  sellingPriceText: {fileID: 4922595086598108491}
+  capacityUpgradeButton: {fileID: 1846423757660949}
+  capacityUpgradeText: {fileID: 4922806534321247185}
+  plotSizeUpgradeButton: {fileID: 1775058093590646927}
+  plotSizeUpgradeText: {fileID: 8126534729995690267}
 --- !u!1 &4922595086257378378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,7 +1174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6690834, g: 0.8018868, b: 0.63923997, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1304,7 +1314,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Speed upgrade
 
-    level 1'
+    level 1
+
+    500'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1440,7 +1452,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Capacity upgrade
 
-    level 1'
+    Level 1
+
+    600'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1569,7 +1583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7728729, g: 0.9811321, b: 0.91229504, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1632,7 +1646,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4922595086169463233}
         m_TargetAssemblyTypeName: Plot, Assembly-CSharp
-        m_MethodName: UI_SellProducts
+        m_MethodName: UI_UpgradePlotSize
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

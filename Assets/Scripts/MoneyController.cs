@@ -10,17 +10,19 @@ public class MoneyController : MonoBehaviour
 	{
 		EventsManager.OnProductsSoldEvent += EventsManager_OnProductsSoldEvent;
 		EventsManager.OnPlotPurchasedEvent += EventsManager_OnPlotPurchasedEvent;
+		EventsManager.OnUpgradePurchasedEvent += EventsManager_OnUpgradePurchasedEvent;
 	}
 
 	private void OnDestroy()
 	{
 		EventsManager.OnProductsSoldEvent -= EventsManager_OnProductsSoldEvent;
 		EventsManager.OnPlotPurchasedEvent -= EventsManager_OnPlotPurchasedEvent;
+		EventsManager.OnUpgradePurchasedEvent -= EventsManager_OnUpgradePurchasedEvent;
 	}
 
 	void Start()
 	{
-		moneyAmount = 2000;
+		//moneyAmount = 2000;
 		UpdateMoneyText();
 		EventsManager.RaiseMoneyUpdatedEvent(moneyAmount);
 	}
@@ -40,6 +42,15 @@ public class MoneyController : MonoBehaviour
 
 		EventsManager.RaiseMoneyUpdatedEvent(moneyAmount);
 	}
+
+	private void EventsManager_OnUpgradePurchasedEvent(float price)
+	{
+		moneyAmount -= price;
+		UpdateMoneyText();
+
+		EventsManager.RaiseMoneyUpdatedEvent(moneyAmount);
+	}
+
 
 	void UpdateMoneyText()
 	{

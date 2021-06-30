@@ -7,6 +7,13 @@ public class EventsManager
 		OnProductsSoldEvent?.Invoke(sellingPrice);
 	}
 
+	public delegate void OnUpgradePurchased(float price);
+	public static event OnUpgradePurchased OnUpgradePurchasedEvent;
+	public static void RaiseUpgradePurchasedEvent(float price)
+	{
+		OnUpgradePurchasedEvent?.Invoke(price);
+	}
+
 	public delegate void OnPlotPurchased(PurchaseOption purchase);
 	public static event OnPlotPurchased OnPlotPurchasedEvent;
 	public static void RaisePlotPurchasedEvent(PurchaseOption purchase)
