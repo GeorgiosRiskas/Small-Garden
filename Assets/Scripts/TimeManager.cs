@@ -20,7 +20,6 @@ public class TimeManager : MonoBehaviour
 				Debug.LogFormat("Quit for {0} seconds", timespan.TotalSeconds);
 			}
 
-
 			PlayerPrefs.SetString("lastDate", lastDate.ToString());
 		}
 	}

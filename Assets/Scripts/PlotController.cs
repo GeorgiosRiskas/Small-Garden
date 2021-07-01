@@ -58,7 +58,7 @@ public class PlotController : MonoBehaviour
 		var remainingProgress = ProducedFruitsWhileAway() - producedFruitsSinceLastQuit;
 		producedFruitsCount = loadData.producedFruitsCount + producedFruitsSinceLastQuit;
 
-		if (producedFruitsCount >= plotInfo.warehouse.currentCapacity)
+		if (producedFruitsCount > plotInfo.warehouse.currentCapacity)
 		{
 			producedFruitsCount = plotInfo.warehouse.currentCapacity;
 			elapsedTime = 0;
@@ -77,11 +77,6 @@ public class PlotController : MonoBehaviour
 		UpdateProgressSliderDefaultValues();
 		UpdateInfoTexts();
 		UpdateUpgradeText();
-	}
-
-	private float ProducedFruitsWhileAway()
-	{
-		return TimeManager.TimeSinceLastVisit / plotInfo.productionTime;
 	}
 
 	void Update()
@@ -191,5 +186,10 @@ public class PlotController : MonoBehaviour
 	public PlotSaveData CurrentPlotSaveData()
 	{
 		return new PlotSaveData((int)plotInfo.type, plotInfo.currentPlotSizeUpgradeLevel, plotInfo.warehouse.currentCapacityUpgradeLevel, producedFruitsCount, elapsedTime);
+	}
+
+	private float ProducedFruitsWhileAway()
+	{
+		return TimeManager.TimeSinceLastVisit / plotInfo.productionTime;
 	}
 }
