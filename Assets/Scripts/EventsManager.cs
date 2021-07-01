@@ -28,9 +28,9 @@ public class EventsManager
 		OnMoneyUpdatedEvent?.Invoke(amount);
 	}
 
-	public delegate void OnPlotWasCreated(Plot plot);
+	public delegate void OnPlotWasCreated(PlotController plot);
 	public static event OnPlotWasCreated OnPlotWasCreatedEvent;
-	public static void RaisePlotWasCreatedEvent(Plot plot)
+	public static void RaisePlotWasCreatedEvent(PlotController plot)
 	{
 		OnPlotWasCreatedEvent?.Invoke(plot);
 	}

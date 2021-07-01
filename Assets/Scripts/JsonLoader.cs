@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class JsonLoader : MonoBehaviour
 {
 	public static JsonLoader Instance;
-	public PlotsObjectRoot plotsObjectRoot;
-	public List<PlotsObject> plotObjectsList;
-
+	private PlotsObjectRoot plotsObjectRoot;
 
 	void Awake()
 	{
@@ -16,7 +13,7 @@ public class JsonLoader : MonoBehaviour
 		plotsObjectRoot = JsonUtility.FromJson<PlotsObjectRoot>("{\"plots\":" + plotsJson.text + "}");
 	}
 
-	public PlotInfo GetPlotInfoByType(ProductType type)
+	public PlotInfo GetPlotInfoByType(PlotType type)
 	{
 		PlotInfo info = new PlotInfo();
 		foreach (var plotDefault in plotsObjectRoot.plots)
@@ -30,6 +27,4 @@ public class JsonLoader : MonoBehaviour
 
 		return info;
 	}
-
-
 }

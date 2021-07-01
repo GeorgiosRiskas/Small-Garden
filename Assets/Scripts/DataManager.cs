@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-1000)]
 public class DataManager : MonoBehaviour
@@ -12,7 +11,7 @@ public class DataManager : MonoBehaviour
 	[SerializeField] private PlayerData playerData;
 	[SerializeField] private SaveData saveData;
 
-	public List<Plot> createdPlotsList;
+	public List<PlotController> createdPlotsList;
 	public float currentMoney;
 
 	private void Awake()
@@ -34,11 +33,6 @@ public class DataManager : MonoBehaviour
 		EventsManager.OnMoneyUpdatedEvent += EventsManager_OnMoneyUpdatedEvent;
 
 		LoadGame();
-
-		if (SceneManager.GetActiveScene().name != "Game")
-		{
-			SceneManager.LoadScene("Game");
-		}
 	}
 
 	private void OnApplicationQuit()
@@ -54,7 +48,7 @@ public class DataManager : MonoBehaviour
 		SaveGame();
 	}
 
-	private void EventsManager_OnPlotWasCreatedEvent(Plot plot)
+	private void EventsManager_OnPlotWasCreatedEvent(PlotController plot)
 	{
 		createdPlotsList.Add(plot);
 	}

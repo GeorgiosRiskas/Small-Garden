@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public enum ProductType { Apple, Bananas, Cherry, Grapes };
+public enum PlotType { Apple, Bananas, Cherry, Grapes };
 
 [System.Serializable]
 public class PlotInfo
 {
-	public ProductType type;
+	public PlotType type;
 	public float unitProductionRate;
 	public float plotSizeFixedUpgradeAmount;
 	public int plotSizeUpgradeLevelMax;
@@ -19,7 +19,7 @@ public class PlotInfo
 
 	public Warehouse warehouse;
 
-	public PlotInfo(ProductType _type, float _unitProductionRate, float _plotSizeFixedUpgradeAmount, int _plotSizeUpgradeLevelMax, Warehouse _warehouse)
+	public PlotInfo(PlotType _type, float _unitProductionRate, float _plotSizeFixedUpgradeAmount, int _plotSizeUpgradeLevelMax, Warehouse _warehouse)
 	{
 		type = _type;
 		unitProductionRate = _unitProductionRate;
@@ -28,7 +28,7 @@ public class PlotInfo
 		warehouse = _warehouse;
 
 		plotSizeBase = 1;
-		//currentPlotSizeUpgradeLevel = _currentPlotSizeUpgradeLevel;
+		currentPlotSizeUpgradeLevel = 0;
 	}
 
 	public PlotInfo()
@@ -57,7 +57,7 @@ public class Warehouse
 		capacityUpgradeLevelMax = _capacityUpgradeLevelMax;
 		fixedUnitPrice = _fixedUnitPrice;
 
-		//currentCapacityUpgradeLevel = _currentCapacityUpgradeLevel;
+		currentCapacityUpgradeLevel = 0;
 	}
 }
 
@@ -65,6 +65,6 @@ public class Warehouse
 [System.Serializable]
 public class PurchaseOption
 {
-	public ProductType type;
+	public PlotType type;
 	public float purchasePrice;
 }

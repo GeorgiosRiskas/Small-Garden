@@ -17,17 +17,12 @@ public class PlotsSpawnController : MonoBehaviour
 		EventsManager.OnGameWasLoadedEvent -= EventsManager_OnGameWasLoadedEvent;
 	}
 
-	//private void Update()
-	//{
-	//	Debug.LogFormat("Upgrade value for apples is {0}", InitVariables.PlotByType(0).warehouse.currentCapacityUpgradeLevel);
-	//}
-
 	private void EventsManager_OnGameWasLoadedEvent(PlayerData playerData)
 	{
 		for (int i = 0; i < playerData.plotDataList.Count; i++)
 		{
 			var go = Instantiate(plotPrefab, spawnTransform);
-			var plot = go.GetComponent<Plot>();
+			var plot = go.GetComponent<PlotController>();
 			plot.Init(playerData.plotDataList[i]);
 			EventsManager.RaisePlotWasCreatedEvent(plot);
 		}
@@ -36,7 +31,7 @@ public class PlotsSpawnController : MonoBehaviour
 	private void EventsManager_OnPlotPurchasedEvent(PurchaseOption purchase)
 	{
 		var go = Instantiate(plotPrefab, spawnTransform);
-		var plot = go.GetComponent<Plot>();
+		var plot = go.GetComponent<PlotController>();
 		plot.Init(purchase.type);
 		EventsManager.RaisePlotWasCreatedEvent(plot);
 	}

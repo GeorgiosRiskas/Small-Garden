@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Plot : MonoBehaviour
+public class PlotController : MonoBehaviour
 {
 	public PlotInfo plotInfo;
 
@@ -34,20 +34,19 @@ public class Plot : MonoBehaviour
 		EventsManager.OnMoneyUpdatedEvent -= EventsManager_OnMoneyUpdatedEvent;
 	}
 
-	public void Init(ProductType type)
+	// Init on spawn
+	public void Init(PlotType type)
 	{
-		Debug.Log("Init by spawn");
-		plotInfo = JsonLoader.Instance.GetPlotInfoByType(type); //new PlotInfo(info.type, info.unitProductionRate, info.plotSizeFixedUpgradeAmount, info.plotSizeUpgradeLevelMax, info.warehouse);
+		plotInfo = JsonLoader.Instance.GetPlotInfoByType(type);
 		mainIcon.sprite = icons[(int)type];
 
 		currentMoneyAmount = MoneyController.CurrentMoneyAmount;
 	}
 
+	// Init on load
 	public void Init(PlotSaveData loadData)
 	{
-		Debug.Log("Init by load");
-		//var info = InitVariables.PlotByType((ProductType)loadData.plotType);
-		plotInfo = JsonLoader.Instance.GetPlotInfoByType((ProductType)loadData.plotType); //new PlotInfo(info.type, info.unitProductionRate, info.plotSizeFixedUpgradeAmount, info.plotSizeUpgradeLevelMax, info.warehouse);
+		plotInfo = JsonLoader.Instance.GetPlotInfoByType((PlotType)loadData.plotType);
 		mainIcon.sprite = icons[loadData.plotType];
 
 		// Values that change when the game saves
@@ -74,7 +73,6 @@ public class Plot : MonoBehaviour
 			progressSlider.value = progressSlider.maxValue;
 			return;
 		}
-
 
 		elapsedTime += Time.deltaTime;
 		progressSlider.value = elapsedTime;
@@ -142,7 +140,6 @@ public class Plot : MonoBehaviour
 
 	public void UI_UpgradeCapacity()
 	{
-		// Getting a reference of the price before the currentCapacityUpgradeLevel is incremented
 		var price = plotInfo.warehouse.capacityUpgradeCost;
 		plotInfo.warehouse.currentCapacityUpgradeLevel++;
 		UpdateUpgradeText();
