@@ -52,8 +52,21 @@ public class PlotController : MonoBehaviour
 		// Values that change when the game saves
 		plotInfo.currentPlotSizeUpgradeLevel = loadData.plotUpgradeLevel;
 		plotInfo.warehouse.currentCapacityUpgradeLevel = loadData.capacityUpgradeLevel;
-		producedFruitsCount = loadData.producedFruitsCount;
-		elapsedTime = loadData.elapsedTime;
+
+
+		var producedFruitsSinceLastQuit = Mathf.RoundToInt(ProducedFruitsWhileAway());
+		var remainingProgress = ProducedFruitsWhileAway() - producedFruitsSinceLastQuit;
+		producedFruitsCount = loadData.producedFruitsCount + producedFruitsSinceLastQuit;
+
+		if (producedFruitsCount >= plotInfo.warehouse.currentCapacity)
+		{
+			producedFruitsCount = plotInfo.warehouse.currentCapacity;
+			elapsedTime = 0;
+		}
+		else
+		{
+			elapsedTime = loadData.elapsedTime + remainingProgress;
+		}
 
 		currentMoneyAmount = MoneyController.CurrentMoneyAmount;
 	}
@@ -64,6 +77,11 @@ public class PlotController : MonoBehaviour
 		UpdateProgressSliderDefaultValues();
 		UpdateInfoTexts();
 		UpdateUpgradeText();
+	}
+
+	private float ProducedFruitsWhileAway()
+	{
+		return TimeManager.TimeSinceLastVisit / plotInfo.productionTime;
 	}
 
 	void Update()
