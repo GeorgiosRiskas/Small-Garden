@@ -9,6 +9,9 @@ public class Plot : MonoBehaviour
 	private int producedFruitsCount;
 	private float elapsedTime;
 
+	[Header("Icons are assigned in the same order as the types")]
+	public Sprite[] icons;
+	public Image mainIcon;
 	public Slider progressSlider;
 	public TextMeshProUGUI productsCountText;
 	public TextMeshProUGUI sellingPriceText;
@@ -18,6 +21,8 @@ public class Plot : MonoBehaviour
 
 	public Button plotSizeUpgradeButton;
 	public TextMeshProUGUI plotSizeUpgradeText;
+
+	private float currentMoneyAmount;
 
 	private void Awake()
 	{
@@ -29,9 +34,35 @@ public class Plot : MonoBehaviour
 		EventsManager.OnMoneyUpdatedEvent -= EventsManager_OnMoneyUpdatedEvent;
 	}
 
+	public void Init(ProductType type)
+	{
+		Debug.Log("Init by spawn");
+		plotInfo = JsonLoader.Instance.GetPlotInfoByType(type); //new PlotInfo(info.type, info.unitProductionRate, info.plotSizeFixedUpgradeAmount, info.plotSizeUpgradeLevelMax, info.warehouse);
+		mainIcon.sprite = icons[(int)type];
+
+		currentMoneyAmount = MoneyController.CurrentMoneyAmount;
+	}
+
+	public void Init(PlotSaveData loadData)
+	{
+		Debug.Log("Init by load");
+		//var info = InitVariables.PlotByType((ProductType)loadData.plotType);
+		plotInfo = JsonLoader.Instance.GetPlotInfoByType((ProductType)loadData.plotType); //new PlotInfo(info.type, info.unitProductionRate, info.plotSizeFixedUpgradeAmount, info.plotSizeUpgradeLevelMax, info.warehouse);
+		mainIcon.sprite = icons[loadData.plotType];
+
+		// Values that change when the game saves
+		plotInfo.currentPlotSizeUpgradeLevel = loadData.plotUpgradeLevel;
+		plotInfo.warehouse.currentCapacityUpgradeLevel = loadData.capacityUpgradeLevel;
+		producedFruitsCount = loadData.producedFruitsCount;
+		elapsedTime = loadData.elapsedTime;
+
+		currentMoneyAmount = MoneyController.CurrentMoneyAmount;
+	}
+
 	void Start()
 	{
-		UpdateProgressSlider();
+		SetButtonsInteractable();
+		UpdateProgressSliderDefaultValues();
 		UpdateInfoTexts();
 		UpdateUpgradeText();
 	}
@@ -39,24 +70,25 @@ public class Plot : MonoBehaviour
 	void Update()
 	{
 		if (producedFruitsCount == plotInfo.warehouse.currentCapacity)
+		{
+			progressSlider.value = progressSlider.maxValue;
 			return;
+		}
+
 
 		elapsedTime += Time.deltaTime;
+		progressSlider.value = elapsedTime;
 		if (elapsedTime >= plotInfo.productionTime)
 		{
 			producedFruitsCount++;
 			elapsedTime = 0;
 		}
 
-		if (producedFruitsCount < plotInfo.warehouse.currentCapacity)
-		{
-			progressSlider.value = elapsedTime;
-		}
-
 		UpdateInfoTexts();
+		UpdateUpgradeText();
 	}
 
-	void UpdateProgressSlider()
+	void UpdateProgressSliderDefaultValues()
 	{
 		progressSlider.minValue = 0;
 		progressSlider.maxValue = plotInfo.productionTime;
@@ -91,8 +123,14 @@ public class Plot : MonoBehaviour
 
 	private void EventsManager_OnMoneyUpdatedEvent(float amount)
 	{
-		capacityUpgradeButton.interactable = (plotInfo.warehouse.capacityUpgradeCost <= amount) && (plotInfo.warehouse.currentCapacityUpgradeLevel < plotInfo.warehouse.capacityUpgradeLevelMax);
-		plotSizeUpgradeButton.interactable = (plotInfo.plotSizeUpgradeCost <= amount) && (plotInfo.currentPlotSizeUpgradeLevel < plotInfo.plotSizeUpgradeLevelMax);
+		currentMoneyAmount = amount;
+		SetButtonsInteractable();
+	}
+
+	void SetButtonsInteractable()
+	{
+		capacityUpgradeButton.interactable = (plotInfo.warehouse.capacityUpgradeCost <= currentMoneyAmount) && (plotInfo.warehouse.currentCapacityUpgradeLevel < plotInfo.warehouse.capacityUpgradeLevelMax);
+		plotSizeUpgradeButton.interactable = (plotInfo.plotSizeUpgradeCost <= currentMoneyAmount) && (plotInfo.currentPlotSizeUpgradeLevel < plotInfo.plotSizeUpgradeLevelMax);
 	}
 
 	public void UI_SellProducts()
@@ -115,7 +153,7 @@ public class Plot : MonoBehaviour
 	{
 		var price = plotInfo.plotSizeUpgradeCost;
 		plotInfo.currentPlotSizeUpgradeLevel++;
-		UpdateProgressSlider();
+		UpdateProgressSliderDefaultValues();
 		UpdateUpgradeText();
 		EventsManager.RaiseUpgradePurchasedEvent(price);
 	}
@@ -133,5 +171,10 @@ public class Plot : MonoBehaviour
 	private float NextPlotSizeUpgradeLevel()
 	{
 		return plotInfo.currentPlotSizeUpgradeLevel + 1;
+	}
+
+	public PlotSaveData CurrentPlotSaveData()
+	{
+		return new PlotSaveData((int)plotInfo.type, plotInfo.currentPlotSizeUpgradeLevel, plotInfo.warehouse.currentCapacityUpgradeLevel, producedFruitsCount, elapsedTime);
 	}
 }

@@ -27,4 +27,18 @@ public class EventsManager
 	{
 		OnMoneyUpdatedEvent?.Invoke(amount);
 	}
+
+	public delegate void OnPlotWasCreated(Plot plot);
+	public static event OnPlotWasCreated OnPlotWasCreatedEvent;
+	public static void RaisePlotWasCreatedEvent(Plot plot)
+	{
+		OnPlotWasCreatedEvent?.Invoke(plot);
+	}
+
+	public delegate void OnGameWasLoaded(PlayerData playerData);
+	public static event OnGameWasLoaded OnGameWasLoadedEvent;
+	public static void RaiseGameWasLoadedEvent(PlayerData playerData)
+	{
+		OnGameWasLoadedEvent?.Invoke(playerData);
+	}
 }

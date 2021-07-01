@@ -3,14 +3,19 @@ using UnityEngine;
 
 public class MoneyController : MonoBehaviour
 {
-	public float moneyAmount;
-	public TextMeshProUGUI moneyText;
+	[SerializeField] private float startingAmount;
+	private bool amountChangedOnLoad;
+
+	private static float moneyAmount = 0;
+	public static float CurrentMoneyAmount { get { return moneyAmount; } }
+	[SerializeField] private TextMeshProUGUI moneyText = null;
 
 	private void Awake()
 	{
 		EventsManager.OnProductsSoldEvent += EventsManager_OnProductsSoldEvent;
 		EventsManager.OnPlotPurchasedEvent += EventsManager_OnPlotPurchasedEvent;
 		EventsManager.OnUpgradePurchasedEvent += EventsManager_OnUpgradePurchasedEvent;
+		EventsManager.OnGameWasLoadedEvent += EventsManager_OnGameWasLoadedEvent;
 	}
 
 	private void OnDestroy()
@@ -18,11 +23,21 @@ public class MoneyController : MonoBehaviour
 		EventsManager.OnProductsSoldEvent -= EventsManager_OnProductsSoldEvent;
 		EventsManager.OnPlotPurchasedEvent -= EventsManager_OnPlotPurchasedEvent;
 		EventsManager.OnUpgradePurchasedEvent -= EventsManager_OnUpgradePurchasedEvent;
+		EventsManager.OnGameWasLoadedEvent -= EventsManager_OnGameWasLoadedEvent;
+	}
+
+	private void EventsManager_OnGameWasLoadedEvent(PlayerData playerData)
+	{
+		moneyAmount = playerData.moneyAmount;
+		amountChangedOnLoad = true;
 	}
 
 	void Start()
 	{
-		//moneyAmount = 2000;
+		if (!amountChangedOnLoad)
+		{
+			moneyAmount = startingAmount;
+		}
 		UpdateMoneyText();
 		EventsManager.RaiseMoneyUpdatedEvent(moneyAmount);
 	}
@@ -32,7 +47,6 @@ public class MoneyController : MonoBehaviour
 		moneyAmount += sellingPrice;
 		UpdateMoneyText();
 		EventsManager.RaiseMoneyUpdatedEvent(moneyAmount);
-		//Debug.LogFormat("Product sold for {0}", sellingPrice);
 	}
 
 	private void EventsManager_OnPlotPurchasedEvent(PurchaseOption purchase)

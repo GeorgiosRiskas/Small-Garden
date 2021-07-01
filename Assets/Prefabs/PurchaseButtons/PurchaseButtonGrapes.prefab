@@ -118,7 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   purchasePriceText: {fileID: 3015001476585653061}
   purchase:
-    type: 2
+    type: 3
     purchasePrice: 4000
 --- !u!1 &2539239760695991136
 GameObject:
